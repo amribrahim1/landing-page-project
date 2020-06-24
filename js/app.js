@@ -41,12 +41,11 @@ for (const section of sections) {
 
     // Add class 'active' to section when near top of viewport
     addEventListener('scroll', function onScroll() { 
-        var scrollPos = $(document).scrollTop();
+        const scrollPos = $(document).scrollTop();
         $('.navbar__menu a').each(function () {
-            var currLink = $(this);
-            var refElement = $(currLink.attr("href"));
-            if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
-                $('.navbar__menu ul li a').removeClass("active");
+            const currLink = $(this);
+            const refElement = $(currLink.attr("href"));
+            if (refElement.position().top-200 <= scrollPos && refElement.position().top-200 + refElement.height() > scrollPos) {
                 currLink.addClass("active");
             }
             else{
@@ -55,26 +54,36 @@ for (const section of sections) {
         });
     })
 
-// Scroll to anchor ID using scrollTO event
+    // Scroll to anchor ID using scrollTO event
+    function scrollTo(aid){
+        var aTag = $(`section[id='${aid}']`);
+        $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+    }
 
 
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
+    /**
+     * End Main Functions
+    * Begin Events
+     * 
+    */
 
-// Build menu 
+    // Build menu 
 
     // Scroll to section on link click
-    a.addEventListener('click', function clickHandler() {                 
+    a.addEventListener('click', function clickHandler() {    
+        scrollTo(`${section.id}`);          
         // remove active from another sections
+        const activeSection = $(`#${section.id}`);
         const allLi = ul.querySelectorAll('a');      
         allLi.forEach((a) => {               
-            a.classList.remove('active');     
+            a.classList.remove('active');    
+            $('section').removeClass('active-class'); 
         })        
         // Set section as active
-        this.classList.add('active');    
+        this.classList.add('active');
+        activeSection.addClass('active-class');  
+        
+      
     });
     a.textContent = section.dataset.nav;    
     li.appendChild(a);
